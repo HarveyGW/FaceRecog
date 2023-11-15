@@ -53,27 +53,27 @@ else:
     known_faces, known_names = load_known_faces('.')
     save_encoded_faces(cache_file, (known_faces, known_names))
 
-# Function to recognize faces and save the image
-def recognize_faces_and_save(test_image_path, output_image_path):
+# Function to recognise faces and save the image
+def recognise_faces_and_save(test_image_path, output_image_path):
     test_image = face_recognition.load_image_file(test_image_path)
     face_locations = face_recognition.face_locations(test_image)
     face_encodings = face_recognition.face_encodings(test_image, face_locations)
-    person_recognized = False
+    person_recognised = False
 
     for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
         matches = face_recognition.compare_faces(known_faces, face_encoding)
         name = Fore.RED + "Unknown" + Style.RESET_ALL  # Red color for 'Unknown'
         if True in matches:
             first_match_index = matches.index(True)
-            name = Fore.GREEN + known_names[first_match_index] + Style.RESET_ALL  # Green color for recognized names
-            person_recognized = True
+            name = Fore.GREEN + known_names[first_match_index] + Style.RESET_ALL  # Green color for recognised names
+            person_recognised = True
 
         cv2.rectangle(test_image, (left, top), (right, bottom), (0, 0, 255), 2)
         cv2.putText(test_image, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 255, 255), 1)
 
     cv2.imwrite(output_image_path, cv2.cvtColor(test_image, cv2.COLOR_RGB2BGR))
 
-    if person_recognized:
+    if person_recognised:
         print(Fore.CYAN + "Querying API..." + Style.RESET_ALL)
         print(name)
         try:
@@ -86,4 +86,4 @@ def recognize_faces_and_save(test_image_path, output_image_path):
 location = "Owen"
 test_subject = input(Fore.BLUE + "Enter Test File Name: " + Style.RESET_ALL)
 output_path = "output.jpg"
-recognize_faces_and_save(test_subject, output_path)
+recognise_faces_and_save(test_subject, output_path)
