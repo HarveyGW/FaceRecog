@@ -62,10 +62,10 @@ def recognise_faces_and_save(test_image_path, output_image_path):
 
     for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
         matches = face_recognition.compare_faces(known_faces, face_encoding)
-        name = Fore.RED + "Unknown" + Style.RESET_ALL  # Red color for 'Unknown'
+        name = Fore.RED + "Unknown" + Style.RESET_ALL
         if True in matches:
             first_match_index = matches.index(True)
-            name = Fore.GREEN + known_names[first_match_index] + Style.RESET_ALL  # Green color for recognised names
+            name = Fore.GREEN + known_names[first_match_index] + Style.RESET_ALL
             person_recognised = True
 
         cv2.rectangle(test_image, (left, top), (right, bottom), (0, 0, 255), 2)
@@ -75,7 +75,6 @@ def recognise_faces_and_save(test_image_path, output_image_path):
 
     if person_recognised:
         print(Fore.CYAN + "Querying API..." + Style.RESET_ALL)
-        print(name)
         try:
             response = requests.get(f"http://45.87.28.51:5000/attendance?ID={name}&Location={location}&present=true")
             response.raise_for_status()
