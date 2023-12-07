@@ -93,6 +93,11 @@ else:
 
 
 def recognise_faces_from_webcams():
+    print(
+        Fore.GREEN
+        + f"Starting..."
+        + Style.RESET_ALL
+        )
     video_capture1 = cv2.VideoCapture(0)  # Index for HP 320 FHD Webcam
     video_capture2 = cv2.VideoCapture(2)  # Index for Logi C310 HD Webcam
 
@@ -103,11 +108,12 @@ def recognise_faces_from_webcams():
         return
 
     try:
+        print(Fore.GREEN+"Listening..."+Style.RESET_ALL)
         while True:
             # Read from both cameras
             ret1, frame1 = video_capture1.read()
             ret2, frame2 = video_capture2.read()
-
+            
             # Process each frame from both cameras
             for idx, (ret, frame, video_capture) in enumerate(
                 [(ret1, frame1, video_capture1), (ret2, frame2, video_capture2)]
@@ -122,7 +128,6 @@ def recognise_faces_from_webcams():
                     processed_frame, face_locations
                 )
                 faces_recognised = []
-
                 for (top, right, bottom, left), face_encoding in zip(
                     face_locations, face_encodings
                 ):
@@ -133,7 +138,6 @@ def recognise_faces_from_webcams():
                     if distances[best_match_index] < 0.6:
                         name = known_names[best_match_index]
                         faces_recognised.append(name)
-
                         if name not in api_request_made:
                             api_request_made[name] = False
 
@@ -194,5 +198,4 @@ def recognise_faces_from_webcams():
         video_capture2.release()
         #cv2.destroyAllWindows()
 
-print("Starting...")
 recognise_faces_from_webcams()
