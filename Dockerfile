@@ -1,18 +1,22 @@
-# Use a Microsoft-hosted image with pre-installed Visual Studio Build Tools
-FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019
+# Use the dlib, OpenCV, and Python base image
+FROM orgoro/dlib-opencv-python
 
-# Install Python 3.8.10
-ADD https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe C:\\temp\\python-installer.exe
-RUN C:\\temp\\python-installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
+#Set the working directory in the container
+WORKDIR /usr/src/app
 
-# Set the working directory in the container
-WORKDIR /app
+#Copy the current directory contents into the container at /usr/src/app
+COPY . .
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Install any needed Python packages specified in requirements.txt
+# Make sure requirements.txt does not include dlib or OpenCV as they're already installed
+RUN python --version
+RUN python -m pip install --no-cache-dir -r requirements.txt
+RUN pip list
+# Make port 80 available to the world outside this container
+EXPOSE 80
 
-# Install Python dependencies
-RUN pip install -r requirements.txt
+# Define environment variable
+ENV NAME World
 
-# Run main.py when the container launches
-CMD ["python", "main.py"]
+# Run your Python script when the container launches
+CMD ["python", "./mainDocker.py"]
