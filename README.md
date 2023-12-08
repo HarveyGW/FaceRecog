@@ -3,10 +3,6 @@
 
 This project implements a face recognition system using Python, OpenCV, and Docker. Follow these instructions to set up and run the project. You can either follow the manual setup instructions below or use the provided `runner.sh` script for automated setup and execution.
 
-## Prerequisites
-
-Before you begin, ensure you have Docker installed on your system. If not, you can download and install Docker from [Docker's official website](https://www.docker.com/get-started).
-
 ## Automated Setup Using `runner.sh`
 
 As an alternative to the manual steps, you can use the `runner.sh` script to automate the setup process. This script will handle Docker installation, cloning the repository, configuring camera devices, building the Docker image, and running the container with the appropriate settings. Simply download the script and run it with:
@@ -17,6 +13,10 @@ sudo ./runner.sh
 ```
 
 ## Manual Setup Instructions
+
+## Prerequisites
+
+Before you begin, ensure you have Docker installed on your system. If not, you can download and install Docker from [Docker's official website](https://www.docker.com/get-started).
 
 1. **Install Docker**: 
    Follow the instructions on the Docker website to install Docker on your system.
