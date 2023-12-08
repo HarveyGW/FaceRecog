@@ -74,6 +74,13 @@ for dev in /dev/video*; do
     fi
 done
 
+# Check if any raw video devices were found
+if [ ${#video_devices[@]} -eq 0 ]; then
+    echo -e "${RED}Error: No raw video devices found. Exiting...${NC}"
+    exit 1
+fi
+
+
 # File to store webcam device numbers
 webcam_devices_file="webcam_devices.txt"
 
