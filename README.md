@@ -12,6 +12,7 @@ Before you begin, ensure you have Docker installed on your system. If not, you c
 As an alternative to the manual steps, you can use the `runner.sh` script to automate the setup process. This script will handle Docker installation, cloning the repository, configuring camera devices, building the Docker image, and running the container with the appropriate settings. Simply download the script and run it with:
 
 ```
+chmod +x ./runner.sh
 sudo ./runner.sh
 ```
 
