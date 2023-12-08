@@ -10,6 +10,21 @@ import numpy as np
 
 init()
 
+def get_webcam_device_numbers():
+    try:
+        with open("webcam_devices.txt", "r") as file:
+            return [int(line.strip()) for line in file.readlines()]
+    except Exception as e:
+        print(f"Error reading webcam device numbers: {e}")
+        return []
+
+webcam_numbers = get_webcam_device_numbers()
+if len(webcam_numbers) >= 2:
+    video_capture1 = cv2.VideoCapture(webcam_numbers[0])
+    video_capture2 = cv2.VideoCapture(webcam_numbers[1])
+else:
+    print("Insufficient webcams found. Exiting.")
+    exit(1)
 
 def load_face_encodings(image_path):
     image = face_recognition.load_image_file(image_path)
@@ -91,15 +106,12 @@ else:
     print(f"Trained against the following files: {trained_files}")
     save_encoded_faces(cache_file, (known_faces, known_names))
 
-
 def recognise_faces_from_webcams():
     print(
         Fore.GREEN
         + f"Starting..."
         + Style.RESET_ALL
-        )
-    video_capture1 = cv2.VideoCapture(0)  
-    video_capture2 = cv2.VideoCapture(2)  
+        ) 
 
     api_request_made = {}
 
