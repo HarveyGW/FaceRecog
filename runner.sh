@@ -53,9 +53,10 @@ execute_command "apt-get update"
 execute_command "apt-get install -y docker.io"
 execute_command "systemctl start docker.service"
 
-# Installing ffmpeg
-display_title "🇮​​​​​ 🇳​​​​​ 🇸​​​​​ 🇹​​​​​ 🇦​​​​​ 🇱​​​​​ 🇱​​​​​ 🇮​​​​​ 🇳​​​​​ 🇬​​​​​  🇫​​​​​ 🇫​​​​​ 🇲​​​​​ 🇵​​​​​ 🇪​​​​​ 🇬​​​​​"
+# Installing requirements
+display_title "🇮​​​​​ 🇳​​​​​ 🇸​​​​​ 🇹​​​​​ 🇦​​​​​ 🇱​​​​​ 🇱​​​​​ 🇮​​​​​ 🇳​​​​​ 🇬​​​​​  🇷​​​​​ 🇪​​​​​ 🇶​​​​​ 🇺​​​​​ 🇮​​​​​ 🇷​​​​​ 🇪​​​​​ 🇲​​​​​ 🇪​​​​​ 🇳​​​​​ 🇹​​​​​ 🇸​​​​​"
 execute_command "apt-get install -y ffmpeg"
+execute_command "apt install curl"
 
 # Function to check for raw video devices
 check_for_raw_video() {
@@ -74,12 +75,29 @@ for dev in /dev/video*; do
     fi
 done
 
-# Check if any raw video devices were found
+# Ensure the number of video devices is a multiple of 2 or display the last one
 if [ ${#video_devices[@]} -eq 0 ]; then
     echo -e "${RED}Error: No raw video devices found. Exiting...${NC}"
     exit 1
+elif [ $(( ${#video_devices[@]} % 2 )) -ne 0 ]; then
+    echo -e "${RED}Error: The number of video devices found is not a multiple of 2. Exiting...${NC}"
+    exit 1
 fi
 
+# Check If API Is Online
+display_title "🇨​​​​​ 🇭​​​​​ 🇪​​​​​ 🇨​​​​​ 🇰​​​​​ 🇮​​​​​ 🇳​​​​​ 🇬​​​​​  🇦​​​​​ 🇵​​​​​ 🇮​​​​​  🇴​​​​​ 🇳​​​​​ 🇱​​​​​ 🇮​​​​​ 🇳​​​​​ 🇪​​​​​"
+url="http://45.87.28.51:5000/"
+
+# Use curl to get the HTTP status code
+status=$(curl -o /dev/null -s -w "%{http_code}\n" "$url")
+
+# Check if the status code is 200 (OK)
+if [ "$status" -eq 200 ]; then
+    echo -e "${GREEN}URL is online.${NC}"
+else
+    echo -e "${RED}URL is not online. Status code: $status. Exiting...${NC}"
+    exit 1
+fi
 
 # File to store webcam device numbers
 webcam_devices_file="webcam_devices.txt"
